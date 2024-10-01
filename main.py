@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from data_collection import setup_data
 from black_litterman import black_litterman_optimization
+from fama_french import fama_french_5_algorithm
 
 
 def test_black_litterman():
@@ -25,5 +26,9 @@ def test_black_litterman():
     plt.show()
 
 
+def test_fama_french_5(ticker):
+    fama_french_5_algorithm(ticker)
+
+
 if __name__ == "__main__":
-    setup_data()
+    test_fama_french_5("MSFT")
