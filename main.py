@@ -27,4 +27,3 @@ def test_black_litterman():
 
 if __name__ == "__main__":
     setup_data()
-    test_black_litterman()
