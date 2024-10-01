@@ -1,27 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.style as style
 import seaborn as sns
-import yfinance as yf
 import statsmodels.api as sm
-import datetime
-
-
-def setup_data(ticker):
-    # use Yahoo Finance to download historical data for ticker
-    df = pd.read_parquet('hackathon_sample_v2.parquet')
-    stock_data = df[df['stock_ticker'] == ticker]
-    stock_data.loc[:, 'Adj Close'] = stock_data.loc[:, 'prc'].copy()
-    stock_data.loc[:, 'date'] = stock_data.loc[:, 'date'].apply(
-        lambda date: datetime.datetime.strptime(str(date), '%Y%m%d').strftime('%Y-%m'))
-
-    ticker_monthly = stock_data[['date', 'Adj Close']]
-    ticker_monthly['date'] = pd.PeriodIndex(ticker_monthly['date'], freq="M")
-    ticker_monthly.set_index('date', inplace=True)
-    ticker_monthly['Return'] = ticker_monthly['Adj Close'].pct_change() * 100
-    ticker_monthly = ticker_monthly.fillna(0)
-
-    return ticker_monthly
+from data_collection import setup_data_for_fama_french
 
 
 def check_output(model, ticker):
@@ -62,7 +43,7 @@ def check_output(model, ticker):
 
 
 def fama_french_5_algorithm(ticker):
-    ticker_monthly = setup_data(ticker)
+    ticker_monthly = setup_data_for_fama_french(ticker)
 
     # Step 2: Load the monthly five factors into a dataframe
     ff_factors_monthly = pd.read_csv(

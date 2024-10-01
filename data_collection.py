@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import os
-
+import datetime
 from sklearn.preprocessing import MinMaxScaler
 from config import indicators, predictors
 import pickle
@@ -62,7 +62,7 @@ def create_sequences(data, seq_length=10):
 
 def setup_data_for_prediction():
     data_file = 'data_for_price_prediction.data'
-    
+
     if not os.path.isfile(data_file):
         data = pd.read_parquet('stocks_with_tomorrow_prc.parquet')
         data = data.loc[:, indicators + predictors]
@@ -88,3 +88,19 @@ def setup_data_for_prediction():
 
         with open(data_file, "wb") as f:
             pickle.dump(all_data_points, f)
+
+
+def setup_data_for_fama_french(ticker):
+    df = pd.read_parquet('hackathon_sample_v2.parquet')
+    stock_data = df[df['stock_ticker'] == ticker]
+    stock_data.loc[:, 'Adj Close'] = stock_data.loc[:, 'prc'].copy()
+    stock_data.loc[:, 'date'] = stock_data.loc[:, 'date'].apply(
+        lambda date: datetime.datetime.strptime(str(date), '%Y%m%d').strftime('%Y-%m'))
+
+    ticker_monthly = stock_data[['date', 'Adj Close']]
+    ticker_monthly['date'] = pd.PeriodIndex(ticker_monthly['date'], freq="M")
+    ticker_monthly.set_index('date', inplace=True)
+    ticker_monthly['Return'] = ticker_monthly['Adj Close'].pct_change() * 100
+    ticker_monthly = ticker_monthly.fillna(0)
+
+    return ticker_monthly
