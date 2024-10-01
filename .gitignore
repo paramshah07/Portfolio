@@ -1,0 +1,18 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+venv
+.venv
+*.pth
+
+logs
+data
+model_checkpoints
+models
+
+*.parquet
+*.csv
+*.zip
+*.data
