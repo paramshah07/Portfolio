@@ -1,7 +1,10 @@
 import pandas as pd
 import numpy as np
 import os
+
+from sklearn.preprocessing import MinMaxScaler
 from config import indicators, predictors
+import pickle
 
 
 def setup_data():
@@ -11,6 +14,7 @@ def setup_data():
 
     setup_stock_prices()
     setup_tomorrow()
+    setup_data_for_prediction()
 
 
 def setup_stock_prices():
@@ -43,3 +47,44 @@ def setup_tomorrow():
         df = pd.concat(dfList)
         df = df[indicators + predictors]
         df.to_parquet('stocks_with_tomorrow_prc.parquet')
+
+
+def create_sequences(data, seq_length=10):
+    X = []
+    y = []
+    for i in range(len(data) - seq_length):
+        X_append = data[i:i + seq_length, :len(indicators)]
+        y_append = data[i:i + seq_length, len(indicators):]
+        X.append(X_append)
+        y.append(y_append)
+    return np.array(X), np.array(y)
+
+
+def setup_data_for_prediction():
+    data_file = 'data_for_price_prediction.data'
+    
+    if not os.path.isfile(data_file):
+        data = pd.read_parquet('stocks_with_tomorrow_prc.parquet')
+        data = data.loc[:, indicators + predictors]
+        data = data.fillna(0)
+        data.to_parquet(data_file)
+
+        # Split into train and test sets
+        train_size = int(len(data) * 0.8)
+        train_data, test_data = data[:train_size], data[train_size:]
+
+        # Normalize data
+        scaler = MinMaxScaler()
+        train_data = scaler.fit_transform(train_data)
+        test_data = scaler.transform(test_data)
+
+        # Create sequences for training set
+        X_train, y_train = create_sequences(train_data)
+
+        # Create sequences for testing set
+        X_test, y_test = create_sequences(test_data)
+
+        all_data_points = [X_train, y_train, X_train, y_test]
+
+        with open(data_file, "wb") as f:
+            pickle.dump(all_data_points, f)
