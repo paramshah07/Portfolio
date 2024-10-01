@@ -22,8 +22,6 @@ def create_sequences(data, seq_length=10):
         y_append = data[i:i + seq_length, len(indicators):]
         X.append(X_append)
         y.append(y_append)
-        print(X_append)
-        print(y_append)
     return np.array(X), np.array(y)
 
 

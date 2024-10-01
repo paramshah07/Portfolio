@@ -16,3 +16,4 @@ models
 *.csv
 *.zip
 *.data
+*.keras
