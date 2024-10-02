@@ -42,7 +42,6 @@ ipykernel
 stable-baselines3
 scikit-learn
 shimmy>=0.2.1
-PyQt5
 pyarrow
 fastparquet
 # tensorrt
