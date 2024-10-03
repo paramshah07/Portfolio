@@ -31,10 +31,11 @@ def test_fama_french_5(ticker):
     fama_french_5_algorithm(ticker)
 
 
-def test_ppo_porfolio_algorithm(steps=10_000, device='mps'):
-    ppo_porfolio_algorithm(total_timesteps=steps, device=device)
+def test_ppo_porfolio_algorithm(steps=10_000, device='mps', ticker="AAPL"):
+    ppo_porfolio_algorithm(total_timesteps=steps,
+                           device=device, tickerToCheck=ticker)
 
 
 if __name__ == "__main__":
     setup_data()
-    test_ppo_porfolio_algorithm()
+    test_ppo_porfolio_algorithm(ticker="SUNW")
