@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from data_collection import setup_data
 from black_litterman import black_litterman_optimization
 from fama_french import fama_french_5_algorithm
+from stock_rl import ppo_porfolio_algorithm
 
 
 def test_black_litterman():
@@ -30,6 +31,10 @@ def test_fama_french_5(ticker):
     fama_french_5_algorithm(ticker)
 
 
+def test_ppo_porfolio_algorithm(steps=10_000, device='mps'):
+    ppo_porfolio_algorithm(total_timesteps=steps, device=device)
+
+
 if __name__ == "__main__":
     setup_data()
-    test_fama_french_5("MSFT")
+    test_ppo_porfolio_algorithm()

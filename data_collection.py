@@ -104,3 +104,52 @@ def setup_data_for_fama_french(ticker):
     ticker_monthly = ticker_monthly.fillna(0)
 
     return ticker_monthly
+
+# Function to detect and adjust stock splits
+# Function to detect and adjust stock splits for all stocks in the dataset
+
+
+def detect_and_adjust_splits_for_all_stocks(data):
+    # Sort by stock_ticker and date to ensure proper comparison for each stock
+    data = data.sort_values(by=['stock_ticker', 'date']).copy()
+
+    # Iterate through each stock group identified by 'stock_ticker'
+    for stock_ticker, stock_data in data.groupby('stock_ticker'):
+        stock_data = stock_data.sort_values(by='date')
+
+        # Iterate over the rows for the current stock to check for splits
+        for i in range(1, len(stock_data)):
+            prev_price = stock_data.iloc[i - 1]['prc']
+            current_price = stock_data.iloc[i]['prc']
+            prev_market_equity = stock_data.iloc[i - 1]['market_equity']
+            current_market_equity = stock_data.iloc[i]['market_equity']
+
+            # Detect a significant drop in price with a stable market equity
+            if prev_price > current_price * 2 and abs(prev_market_equity - current_market_equity) < 0.1 * prev_market_equity:
+                split_ratio = round(prev_price / current_price)
+                print(
+                    f"Stock split detected for {stock_ticker} on {stock_data.iloc[i]['date']} with a ratio of {split_ratio}-for-1")
+
+                # Adjust all previous prices for this stock according to the split ratio
+                data.loc[(data['stock_ticker'] == stock_ticker) & (
+                    data['date'] <= stock_data.iloc[i]['date']), 'prc'] /= split_ratio
+
+    data['stock_ticker'] = data['stock_ticker'].astype(str)
+    return data
+
+
+def setup_data_for_stock_rl():
+    print('[logs] starting the algorithm')
+
+    data_file = 'hackathon_data_with_adjusted_splits.parquet'
+
+    if not os.path.isfile(data_file):
+        data = pd.read_parquet('hackathon_sample_v2.parquet')
+        data = detect_and_adjust_splits_for_all_stocks(data)
+        data = data.fillna(0)
+        data.to_parquet(data_file)
+
+    data = pd.read_parquet(data_file)
+    stockTickers = data['stock_ticker'].unique().tolist()
+
+    return data, stockTickers

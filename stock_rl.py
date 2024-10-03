@@ -3,6 +3,7 @@ from stable_baselines3 import PPO
 from config import indicators
 
 from gym_anytrading.envs import StocksEnv
+from data_collection import setup_data_for_stock_rl
 
 import numpy as np
 import pandas as pd
@@ -29,15 +30,6 @@ class PersonalStockEnv(StocksEnv):
 
     def _process_data(self):
         return self.prices, self.signal_features
-
-
-def setup_data():
-    print('[logs] starting the algorithm')
-    data = pd.read_parquet('hackathon_sample_v2.parquet')
-    data = data.fillna(0)
-    stockTickers = data['stock_ticker'].unique().tolist()
-
-    return data, stockTickers
 
 
 def setup_model(data, stockTickers, device):
@@ -79,10 +71,10 @@ def check_ppo_portfolio_algorithm(data, stockTickers):
     plt.show()
 
 
-def ppo_porfolio_algorithm(total_timesteps=10_000, device='mpu'):
+def ppo_porfolio_algorithm(total_timesteps=10_000, device='mps'):
     bot_name = 'trading_bot.zip'
 
-    data, stockTickers = setup_data()
+    data, stockTickers = setup_data_for_stock_rl()
 
     if not os.path.isfile(bot_name):
         model = setup_model(data, stockTickers, device)
@@ -92,8 +84,3 @@ def ppo_porfolio_algorithm(total_timesteps=10_000, device='mpu'):
         model.save(bot_name)
 
     check_ppo_portfolio_algorithm(data, stockTickers)
-
-
-if __name__ == "__main__":
-    # Use device="mps" for apple silicon macs
-    ppo_porfolio_algorithm(device="mps")
