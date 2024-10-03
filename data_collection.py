@@ -15,6 +15,7 @@ def setup_data():
     setup_stock_prices()
     setup_tomorrow()
     setup_data_for_prediction()
+    setup_data_for_stock_rl()
 
 
 def setup_stock_prices():
