@@ -31,4 +31,5 @@ def test_fama_french_5(ticker):
 
 
 if __name__ == "__main__":
+    setup_data()
     test_fama_french_5("MSFT")
