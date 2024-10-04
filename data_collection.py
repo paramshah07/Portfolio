@@ -16,6 +16,7 @@ def setup_data():
     setup_tomorrow()
     setup_data_for_prediction()
     setup_data_for_stock_rl()
+    setup_testing_data()
 
 
 def setup_stock_prices():
@@ -106,9 +107,6 @@ def setup_data_for_fama_french(ticker):
 
     return ticker_monthly
 
-# Function to detect and adjust stock splits
-# Function to detect and adjust stock splits for all stocks in the dataset
-
 
 def detect_and_adjust_splits_for_all_stocks(data):
     # Sort by stock_ticker and date to ensure proper comparison for each stock
@@ -154,3 +152,17 @@ def setup_data_for_stock_rl():
     stockTickers = data['stock_ticker'].unique().tolist()
 
     return data, stockTickers
+
+
+def setup_testing_data():
+    data_file = 'test_hackathon_data_with_adjusted_splits.parquet'
+
+    if not os.path.isfile(data_file):
+        data = pd.read_parquet('hackathon_sample_v2.parquet')
+        start_id = data.index[data.date == 20100129].tolist()[0]
+        data = data[start_id:]
+        data = detect_and_adjust_splits_for_all_stocks(data)
+        data = data.fillna(0)
+        data.to_parquet(data_file)
+
+    data = pd.read_parquet(data_file)
