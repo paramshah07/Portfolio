@@ -8,7 +8,7 @@ from stock_rl import ppo_porfolio_algorithm
 from config import indicators
 
 
-def select_stock_portfolio(data, num_stocks=75, window_size=1, total_timesteps=10000, device='mps'):
+def select_stock_portfolio(data, num_stocks=75, window_size=1, device='mps'):
     ticker_index = data.columns.get_loc('stock_ticker')
     price_index = data.columns.get_loc('prc')
     indicator_indices = [data.columns.get_loc(col) for col in indicators]
@@ -49,7 +49,7 @@ def select_stock_portfolio(data, num_stocks=75, window_size=1, total_timesteps=1
     return selected_stocks
 
 
-def backtest_portfolio(data, num_stocks=75, window_size=1, total_timesteps=10000, device='mps'):
+def backtest_portfolio(data, num_stocks=75, window_size=1, device='mps'):
     # Sort the data by date
     data = data.sort_values('date')
 
@@ -67,7 +67,7 @@ def backtest_portfolio(data, num_stocks=75, window_size=1, total_timesteps=10000
 
         # Select stocks for the current date
         selected_stocks = select_stock_portfolio(
-            current_data, num_stocks, window_size, total_timesteps, device)
+            current_data, num_stocks, window_size, device)
 
         # If we have a previous portfolio, calculate returns
         if current_portfolio is not None and i > 0:
