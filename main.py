@@ -39,10 +39,11 @@ def test_ppo_porfolio_algorithm(steps=10_000, device='mps', ticker="AAPL"):
 
 def test_portfolio():
     data = pd.read_parquet('test_hackathon_data_with_adjusted_splits.parquet')
-    performance = backtest_portfolio(data)
-    print(performance)
+    performance, composition = backtest_portfolio(data)
+    performance.to_csv('portfolio_performance.csv')
+    composition.to_csv('portfolio_composition.csv')
 
 
 if __name__ == "__main__":
     setup_data()
-    test_portfolio()
+    performance, composition = test_portfolio()

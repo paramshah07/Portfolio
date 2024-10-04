@@ -36,7 +36,6 @@ def check_ppo_portfolio_algorithm(data, stockTickers, ticker="AAPL"):
     obs, _ = env.reset()
 
     while True:
-        obs = obs[np.newaxis, ...]
         action, _ = model.predict(obs)
         obs, rewards, terminated, truncated, info = env.step(action)
         done = terminated or truncated
@@ -50,7 +49,7 @@ def check_ppo_portfolio_algorithm(data, stockTickers, ticker="AAPL"):
     plt.show()
 
 
-def ppo_porfolio_algorithm(total_timesteps=10_000, device='mps', tickerToCheck='AAPL'):
+def ppo_porfolio_algorithm(total_timesteps=100_000, device='mps', tickerToCheck='AAPL'):
     bot_name = 'trading_bot.zip'
 
     data, stockTickers = setup_data_for_stock_rl()

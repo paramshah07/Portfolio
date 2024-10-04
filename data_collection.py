@@ -140,7 +140,7 @@ def detect_and_adjust_splits_for_all_stocks(data):
 def setup_data_for_stock_rl():
     print('[logs] starting the algorithm')
 
-    data_file = 'hackathon_data_with_adjusted_splits.parquet'
+    data_file = 'test_hackathon_data_with_adjusted_splits.parquet'
 
     if not os.path.isfile(data_file):
         data = pd.read_parquet('hackathon_sample_v2.parquet')

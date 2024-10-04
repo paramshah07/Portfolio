@@ -81,6 +81,10 @@ def backtest_portfolio(data, num_stocks=75, window_size=1, device='mps'):
         sorted_blackLittermanReturn = blackLittermanReturn.sort_values(
             by=0, axis=1, ascending=True)
 
+        returns = [
+            0 for index_return in sorted_blackLittermanReturn.columns.tolist()]
+        index_returns = 0
+
         if current_portfolio is not None and i > 0:
             portfolio_return = 0
             for stock, weight in zip(sorted_blackLittermanReturn.columns, sorted_blackLittermanReturn.iloc[0]):
@@ -95,6 +99,8 @@ def backtest_portfolio(data, num_stocks=75, window_size=1, device='mps'):
 
                     stock_return = (curr_price - prev_price) / prev_price
                     portfolio_return += stock_return * weight
+                    returns[index_returns] = stock_return
+                    index_returns += 1
 
             portfolio_performance.append({
                 'date': current_date,
@@ -106,7 +112,8 @@ def backtest_portfolio(data, num_stocks=75, window_size=1, device='mps'):
         portfolio_compositions.append({
             'date': current_date,
             'stocks': sorted_blackLittermanReturn.columns.tolist(),
-            'weights': sorted_blackLittermanReturn.iloc[0].tolist()
+            'weights': sorted_blackLittermanReturn.iloc[0].tolist(),
+            'returns': returns
         })
 
         current_portfolio = [
