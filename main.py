@@ -19,7 +19,6 @@ def test_black_litterman():
     returns = returns.loc[:, index_to_keep]
     stocks = data.keys()
 
-    # Run optimization
     selected_indices, selected_weights = black_litterman_optimization(returns)
 
     stock_selected = [stocks[i] for i in selected_indices]
@@ -29,7 +28,8 @@ def test_black_litterman():
 
 
 def test_fama_french_5(ticker):
-    fama_french_5_algorithm(ticker)
+    coefficients = fama_french_5_algorithm(ticker)
+    print(coefficients)
 
 
 def test_ppo_porfolio_algorithm(steps=10_000, device='mps', ticker="AAPL"):
