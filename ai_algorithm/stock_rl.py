@@ -3,7 +3,7 @@ import os.path
 import matplotlib.pyplot as plt
 from stable_baselines3 import PPO
 
-from data_collection import setup_data_for_stock_rl
+from data.data_collection import setup_data_for_stock_rl
 from personal_env import PersonalStockEnv, personal_process_data
 
 
