@@ -3,7 +3,7 @@ import pandas as pd
 import torch
 from stable_baselines3 import PPO
 import os.path
-from ai_algorithm.stock_rl import ppo_portfolio_algorithm
+from ai_algorithm.RL.stock_rl import ppo_portfolio_algorithm
 from config import indicators, dataDir
 from finance_algorithm.black_litterman import black_litterman_optimization
 

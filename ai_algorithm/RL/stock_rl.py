@@ -5,7 +5,7 @@ from stable_baselines3 import PPO
 
 from config import dataDir
 from data.data_collection import setup_data_for_stock_rl
-from ai_algorithm.personal_env import PersonalStockEnv, personal_process_data
+from ai_algorithm.RL.personal_env import PersonalStockEnv, personal_process_data
 
 
 def setup_model(data, stock_tickers, device):

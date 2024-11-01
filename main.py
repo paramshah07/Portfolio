@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 from config import dataDir
 from data.data_collection import setup_data
-from ai_algorithm.stock_rl import ppo_portfolio_algorithm
+from ai_algorithm.RL.stock_rl import ppo_portfolio_algorithm
 from finance_algorithm.black_litterman import black_litterman_optimization
 from finance_algorithm.fama_french import fama_french_5_algorithm
 from finance_algorithm.evaluate_portfolio import backtest_portfolio
