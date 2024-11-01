@@ -3,7 +3,7 @@ from gym_anytrading.envs import StocksEnv
 from config import indicators
 
 
-def personal_process_data(df, window_size, stockTickers, frame_bound):
+def personal_process_data(df, window_size, frame_bound):
     start = frame_bound[0] - window_size
     end = frame_bound[1]
 
@@ -17,7 +17,7 @@ class PersonalStockEnv(StocksEnv):
     def __init__(self, prices, signal_features, **kwargs):
         self.prices = prices
         self.signal_features = signal_features
-        return super(PersonalStockEnv, self).__init__(**kwargs)
+        super(PersonalStockEnv, self).__init__(**kwargs)
 
     def _process_data(self):
         return self.prices, self.signal_features

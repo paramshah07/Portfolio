@@ -57,12 +57,12 @@ def fama_french_5_algorithm(ticker, show=False):
     ff_factors_subset["Excess_Return"] = ticker_monthly["Return"] - \
         ff_factors_subset["RF"]
 
-    X = sm.add_constant(
+    x = sm.add_constant(
         ff_factors_subset[["Mkt-RF", "SMB", "HML", "RMW", "CMA", "RF"]])
 
     y = ff_factors_subset["Excess_Return"]
 
-    model = sm.OLS(y, X).fit()\
+    model = sm.OLS(y, x).fit()\
 
     if show:
         check_output(model, ticker)

@@ -12,15 +12,15 @@ def setup():
     data_file = 'data_for_price_prediction.data'
 
     with open(data_file, 'rb') as f:
-        X_train, y_train, X_test, y_test = pickle.load(f)
+        x_train, y_train, x_test, y_test = pickle.load(f)
 
-    return X_train, y_train, X_test, y_test
+    return x_train, y_train, x_test, y_test
 
 
-def setup_model(X_train):
+def setup_model(x_train):
     model = Sequential()
     model.add(LSTM(units=256, input_shape=(
-        X_train.shape[1], X_train.shape[2])))
+        x_train.shape[1], x_train.shape[2])))
     model.add(Dense(units=128))
     model.add(Dense(units=32))
     model.add(Dense(units=1))

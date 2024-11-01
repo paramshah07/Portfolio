@@ -12,6 +12,7 @@ from config import indicators, predictors, dataDir, dataFile
 def setup_data():
     data_file = dataFile
     processed_file = os.path.join(dataDir, 'hackathon_sample_v2.parquet')
+
     if not os.path.isfile(processed_file):
         data = pd.read_csv(data_file)
         data.to_parquet(processed_file)
@@ -26,6 +27,7 @@ def setup_data():
 def setup_stock_prices():
     data_file = os.path.join(dataDir, 'hackathon_sample_v2.parquet')
     processed_file = os.path.join(dataDir, 'stock_prices.parquet')
+
     if not os.path.isfile(processed_file):
         table = pd.read_parquet(data_file)
         table = table.loc[:, ['date', 'stock_ticker', 'prc']]
@@ -46,6 +48,7 @@ def setup_stock_prices():
 def setup_tomorrow():
     data_file = os.path.join(dataDir, 'hackathon_sample_v2.parquet')
     processed_file = os.path.join(dataDir, 'stocks_with_tomorrow_prc.parquet')
+
     if not os.path.isfile(processed_file):
         df = pd.read_parquet(data_file)
         df_list = list()
@@ -153,7 +156,7 @@ def detect_and_adjust_splits_for_all_stocks(data):
 def setup_data_for_stock_rl():
     print('[logs] starting the algorithm')
     data_file = os.path.join(dataDir, 'hackathon_sample_v2.parquet')
-    processed_file = 'test_hackathon_data_with_adjusted_splits.parquet'
+    processed_file = os.path.join(dataDir, 'test_hackathon_data_with_adjusted_splits.parquet')
 
     if not os.path.isfile(processed_file):
         data = pd.read_parquet(data_file)
@@ -169,7 +172,7 @@ def setup_data_for_stock_rl():
 
 def setup_testing_data():
     data_file = os.path.join(dataDir, 'hackathon_sample_v2.parquet')
-    processed_file = 'test_hackathon_data_with_adjusted_splits.parquet'
+    processed_file = os.path.join(dataDir, 'test_hackathon_data_with_adjusted_splits.parquet')
 
     if not os.path.isfile(processed_file):
         data = pd.read_parquet(data_file)

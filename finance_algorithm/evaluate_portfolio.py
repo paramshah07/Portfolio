@@ -3,21 +3,17 @@ import pandas as pd
 import torch
 from stable_baselines3 import PPO
 import os.path
-from ai_algorithm.stock_rl import ppo_porfolio_algorithm
-from config import indicators
-from black_litterman import black_litterman_optimization
+from ai_algorithm.stock_rl import ppo_portfolio_algorithm
+from config import indicators, dataDir
+from finance_algorithm.black_litterman import black_litterman_optimization
 
 
-def select_stock_portfolio(data, num_stocks=75, window_size=1, device='mps'):
-    ticker_index = data.columns.get_loc('stock_ticker')
-    price_index = data.columns.get_loc('prc')
-    indicator_indices = [data.columns.get_loc(col) for col in indicators]
-
+def select_stock_portfolio(data):
     results_list = []
-    model_path = 'trading_bot.zip'
+    model_path = os.path.join(dataDir, 'trading_bot.zip')
 
     if not os.path.isfile(model_path):
-        ppo_porfolio_algorithm()
+        ppo_portfolio_algorithm()
 
     model = PPO.load(model_path)
 
@@ -56,7 +52,7 @@ def select_stock_portfolio(data, num_stocks=75, window_size=1, device='mps'):
     return selected_stocks, selected_weights
 
 
-def backtest_portfolio(data, num_stocks=75, window_size=1, device='mps'):
+def backtest_portfolio(data):
 
     data = data.sort_values('date')
 
@@ -72,21 +68,21 @@ def backtest_portfolio(data, num_stocks=75, window_size=1, device='mps'):
         current_data = data[data['date'] == current_date]
 
         selected_stocks, selected_weights = select_stock_portfolio(
-            current_data, num_stocks, window_size, device)
+            current_data)
 
-        blackLittermanReturn = pd.DataFrame(
+        black_litterman_return = pd.DataFrame(
             [selected_weights], columns=selected_stocks)
 
-        sorted_blackLittermanReturn = blackLittermanReturn.sort_values(
+        sorted_black_litterman_return = black_litterman_return.sort_values(
             by=0, axis=1, ascending=True)
 
         returns = [
-            0 for index_return in sorted_blackLittermanReturn.columns.tolist()]
+            0 for _ in sorted_black_litterman_return.columns.tolist()]
         index_returns = 0
 
         if current_portfolio is not None and i > 0:
             portfolio_return = 0
-            for stock, weight in zip(sorted_blackLittermanReturn.columns, sorted_blackLittermanReturn.iloc[0]):
+            for stock, weight in zip(sorted_black_litterman_return.columns, sorted_black_litterman_return.iloc[0]):
                 prev_price_data = data[(
                     data['date'] == dates[i-1]) & (data['stock_ticker'] == stock)]['prc']
                 curr_price_data = current_data[current_data['stock_ticker']
@@ -110,14 +106,14 @@ def backtest_portfolio(data, num_stocks=75, window_size=1, device='mps'):
 
         portfolio_compositions.append({
             'date': current_date,
-            'stocks': sorted_blackLittermanReturn.columns.tolist(),
-            'weights': sorted_blackLittermanReturn.iloc[0].tolist(),
+            'stocks': sorted_black_litterman_return.columns.tolist(),
+            'weights': sorted_black_litterman_return.iloc[0].tolist(),
             'returns': returns
         })
 
         current_portfolio = [
             {'ticker': stock, 'weight': weight}
-            for stock, weight in zip(sorted_blackLittermanReturn.columns, sorted_blackLittermanReturn.iloc[0])
+            for stock, weight in zip(sorted_black_litterman_return.columns, sorted_black_litterman_return.iloc[0])
         ]
 
     performance_df = pd.DataFrame(portfolio_performance)
