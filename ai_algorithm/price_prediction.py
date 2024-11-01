@@ -48,7 +48,7 @@ def price_prediction_algorithm():
 
         model = setup_model(X_train)
 
-        history = model.fit(
+        model.fit(
             X_train, y_train,
             epochs=10,
             batch_size=16,

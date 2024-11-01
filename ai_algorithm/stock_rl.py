@@ -21,7 +21,7 @@ def setup_model(data, stock_tickers, device):
     return model
 
 
-def check_ppo_portfolio_algorithm(data, stock_tickers, ticker="AAPL"):
+def check_ppo_portfolio_algorithm(data, ticker="AAPL"):
     print('[logs] checking the trained model')
 
     window_size = 1
@@ -33,7 +33,8 @@ def check_ppo_portfolio_algorithm(data, stock_tickers, ticker="AAPL"):
     env = PersonalStockEnv(prices, signal_features, df=data[data['stock_ticker'] == ticker], window_size=1,
                            frame_bound=(
                                window_size, len(data[data['stock_ticker'] == ticker])))
-    model = PPO.load("trading_bot")
+    trading_bot = os.path.join(dataDir, 'trading_bot')
+    model = PPO.load(trading_bot)
 
     obs, _ = env.reset()
 
@@ -63,4 +64,4 @@ def ppo_portfolio_algorithm(total_timestamps=100_000, device='mps', checker_tick
         model.learn(total_timesteps=total_timestamps)
         model.save(bot_name)
 
-    check_ppo_portfolio_algorithm(data, stock_tickers, checker_ticker)
+    check_ppo_portfolio_algorithm(data, checker_ticker)

@@ -1,5 +1,9 @@
+import os.path
+
 import pandas as pd
 import matplotlib.pyplot as plt
+
+from config import dataDir
 from data.data_collection import setup_data
 from ai_algorithm.stock_rl import ppo_portfolio_algorithm
 from finance_algorithm.black_litterman import black_litterman_optimization
@@ -37,10 +41,14 @@ def test_ppo_portfolio_algorithm(steps=10_000, device='mps', ticker="AAPL"):
 
 
 def test_portfolio():
-    data = pd.read_parquet('data/test_hackathon_data_with_adjusted_splits.parquet')
+    data_from_file = os.path.join(dataDir, 'test_hackathon_data_with_adjusted_splits.parquet')
+    performance_file = os.path.join(dataDir, 'portfolio_performance.csv')
+    composition_file = os.path.join(dataDir, 'portfolio_composition.csv')
+
+    data = pd.read_parquet(data_from_file)
     performance, composition = backtest_portfolio(data)
-    performance.to_csv('portfolio_performance.csv')
-    composition.to_csv('portfolio_composition.csv')
+    performance.to_csv(performance_file)
+    composition.to_csv(composition_file)
 
 
 if __name__ == "__main__":
