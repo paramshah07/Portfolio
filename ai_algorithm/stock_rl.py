@@ -1,12 +1,10 @@
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 import os.path
 
+import matplotlib.pyplot as plt
 from stable_baselines3 import PPO
 
-from personal_env import PersonalStockEnv, personal_process_data
 from data_collection import setup_data_for_stock_rl
+from personal_env import PersonalStockEnv, personal_process_data
 
 
 def setup_model(data, stockTickers, device):

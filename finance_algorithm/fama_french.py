@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import statsmodels.api as sm
-from data_collection import setup_data_for_fama_french
+from ai_algorithm.data_collection import setup_data_for_fama_french
 
 
 def check_output(model, ticker):

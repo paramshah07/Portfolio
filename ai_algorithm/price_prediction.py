@@ -1,17 +1,11 @@
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import pickle
 import os.path
+import pickle
 
 import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense
-from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
-
-from sklearn.preprocessing import MinMaxScaler
-from config import indicators, predictors
+from tensorflow.keras.layers import LSTM, Dense
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.optimizers import Adam
 
 
 def setup():

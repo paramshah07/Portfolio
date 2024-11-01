@@ -2,9 +2,8 @@ import numpy as np
 import pandas as pd
 import torch
 from stable_baselines3 import PPO
-from personal_env import PersonalStockEnv, personal_process_data
 import os.path
-from stock_rl import ppo_porfolio_algorithm
+from ai_algorithm.stock_rl import ppo_porfolio_algorithm
 from config import indicators
 from black_litterman import black_litterman_optimization
 

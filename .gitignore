@@ -8,9 +8,10 @@ venv
 *.pth
 
 logs
-data
+data/*
 model_checkpoints
 models
+.idea
 
 *.parquet
 *.csv

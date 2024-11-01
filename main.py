@@ -1,11 +1,10 @@
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from data_collection import setup_data
-from black_litterman import black_litterman_optimization
-from fama_french import fama_french_5_algorithm
-from stock_rl import ppo_porfolio_algorithm
-from evaluate_portfolio import backtest_portfolio
+from ai_algorithm.data_collection import setup_data
+from ai_algorithm.stock_rl import ppo_porfolio_algorithm
+from finance_algorithm.black_litterman import black_litterman_optimization
+from finance_algorithm.fama_french import fama_french_5_algorithm
+from finance_algorithm.evaluate_portfolio import backtest_portfolio
 
 
 def test_black_litterman():
@@ -46,4 +45,4 @@ def test_portfolio():
 
 if __name__ == "__main__":
     setup_data()
-    performance, composition = test_portfolio()
+    test_portfolio()

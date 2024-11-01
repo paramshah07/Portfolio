@@ -47,7 +47,6 @@ fastparquet
 # tensorrt
 protobuf==3.20.*
 ipywidgets
-famafrench
 seaborn
 yfinance
 PyPortfolioOpt

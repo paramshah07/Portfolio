@@ -1,6 +1,5 @@
 from gym_anytrading.envs import StocksEnv
-import pandas as pd
-import numpy as np
+
 from config import indicators
 
 
