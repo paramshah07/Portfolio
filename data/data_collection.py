@@ -54,8 +54,8 @@ def setup_tomorrow():
         df_list = list()
         stock_tickers = df.stock_ticker.unique().tolist()
         for ticker in stock_tickers:
-            new_df = df[df['stock_ticker'] == ticker]
-            new_df.loc[:, 'Tomorrow'] = new_df.loc[:, 'prc'].shift(-1).copy()
+            new_df = df[df['stock_ticker'] == ticker].copy()
+            new_df.loc[:, 'Tomorrow'] = new_df.loc[:, 'prc'].shift(-1)
             df_list.append(new_df)
         df = pd.concat(df_list)
         df = df[indicators + predictors]
@@ -108,12 +108,12 @@ def setup_data_for_fama_french(ticker):
     data_file = os.path.join(dataDir, 'hackathon_sample_v2.parquet')
 
     df = pd.read_parquet(data_file)
-    stock_data = df[df['stock_ticker'] == ticker]
-    stock_data.loc[:, 'Adj Close'] = stock_data.loc[:, 'prc'].copy()
+    stock_data = df[df['stock_ticker'] == ticker].copy()
+    stock_data.loc[:, 'Adj Close'] = stock_data.loc[:, 'prc']
     stock_data.loc[:, 'date'] = stock_data.loc[:, 'date'].apply(
         lambda date: datetime.datetime.strptime(str(date), '%Y%m%d').strftime('%Y-%m'))
 
-    ticker_monthly = stock_data[['date', 'Adj Close']]
+    ticker_monthly = stock_data[['date', 'Adj Close']].copy()
     ticker_monthly['date'] = pd.PeriodIndex(ticker_monthly['date'], freq="M")
     ticker_monthly.set_index('date', inplace=True)
     ticker_monthly['Return'] = ticker_monthly['Adj Close'].pct_change() * 100
@@ -124,7 +124,7 @@ def setup_data_for_fama_french(ticker):
 
 def detect_and_adjust_splits_for_all_stocks(data):
     # Sort by stock_ticker and date to ensure proper comparison for each stock
-    data = data.sort_values(by=['stock_ticker', 'date']).copy()
+    data = data.sort_values(by=['stock_ticker', 'date'])
 
     # Iterate through each stock group identified by 'stock_ticker'
     for stock_ticker, stock_data in data.groupby('stock_ticker'):
