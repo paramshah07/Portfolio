@@ -9,3 +9,4 @@ scikit-learn==1.0.2
 seaborn==0.13.2
 statsmodels==0.14.4
 coverage==7.6.4
+fastparquet==2024.11.0

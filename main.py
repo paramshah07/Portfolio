@@ -61,4 +61,3 @@ def test_price_prediction():
 
 if __name__ == "__main__":
     setup_data()
-    test_price_prediction()
