@@ -16,3 +16,4 @@ data/*.parquet
 data/*.csv
 data/*.keras
 data/*.zip
+data/*.data
