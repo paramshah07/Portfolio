@@ -1,6 +1,6 @@
 import os.path
 
-indicators = [
+INDICATORS = [
     'aliq_at', 'aliq_mat', 'ami_126d', 'at_be', 'at_gr1', 'at_me', 'at_turnover', 'be_gr1a', 'be_me', 'beta_60m',
     'beta_dimson_21d', 'betabab_1260d', 'betadown_252d', 'bev_mev', 'bidaskhl_21d', 'capex_abn', 'capx_gr1',
     'capx_gr2', 'capx_gr3', 'cash_at', 'chcsho_12m', 'coa_gr1a', 'col_gr1a', 'cop_at', 'cop_atl1', 'corr_1260d',
@@ -21,7 +21,14 @@ indicators = [
     'turnover_var_126d', 'z_score', 'zero_trades_126d', 'zero_trades_21d', 'zero_trades_252d'
 ]
 
-predictors = ['Tomorrow']
+PREDICTORS = ['Tomorrow']
 
-dataDir = os.path.abspath("data")
-dataFile = os.path.join(dataDir, 'data.csv')
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+DATA_DIR = os.path.join(CURRENT_DIR, "data")
+MODELS_DIR = os.path.join(CURRENT_DIR, "models")
+LOGS_DIR = os.path.join(CURRENT_DIR, "logs")
+
+DATA_FILE = os.path.join(DATA_DIR, 'data.csv')
+
+

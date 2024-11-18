@@ -6,12 +6,12 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
-from config import indicators, predictors, dataDir, dataFile
+from config import INDICATORS, PREDICTORS, DATA_DIR, DATA_FILE
 
 
 def setup_data():
-    data_file = dataFile
-    processed_file = os.path.join(dataDir, 'hackathon_sample_v2.parquet')
+    data_file = DATA_FILE
+    processed_file = os.path.join(DATA_DIR, 'hackathon_sample_v2.parquet')
 
     if not os.path.isfile(processed_file):
         data = pd.read_csv(data_file)
@@ -25,8 +25,8 @@ def setup_data():
 
 
 def setup_stock_prices():
-    data_file = os.path.join(dataDir, 'hackathon_sample_v2.parquet')
-    processed_file = os.path.join(dataDir, 'stock_prices.parquet')
+    data_file = os.path.join(DATA_DIR, 'hackathon_sample_v2.parquet')
+    processed_file = os.path.join(DATA_DIR, 'stock_prices.parquet')
 
     if not os.path.isfile(processed_file):
         table = pd.read_parquet(data_file)
@@ -46,8 +46,8 @@ def setup_stock_prices():
 
 
 def setup_tomorrow():
-    data_file = os.path.join(dataDir, 'hackathon_sample_v2.parquet')
-    processed_file = os.path.join(dataDir, 'stocks_with_tomorrow_prc.parquet')
+    data_file = os.path.join(DATA_DIR, 'hackathon_sample_v2.parquet')
+    processed_file = os.path.join(DATA_DIR, 'stocks_with_tomorrow_prc.parquet')
 
     if not os.path.isfile(processed_file):
         df = pd.read_parquet(data_file)
@@ -58,7 +58,7 @@ def setup_tomorrow():
             new_df.loc[:, 'Tomorrow'] = new_df.loc[:, 'prc'].shift(-1)
             df_list.append(new_df)
         df = pd.concat(df_list)
-        df = df[indicators + predictors]
+        df = df[INDICATORS + PREDICTORS]
         df.to_parquet(processed_file)
 
 
@@ -66,20 +66,20 @@ def create_sequences(data, seq_length=10):
     x = []
     y = []
     for i in range(len(data) - seq_length):
-        x_append = data[i:i + seq_length, :len(indicators)]
-        y_append = data[i:i + seq_length, len(indicators):]
+        x_append = data[i:i + seq_length, :len(INDICATORS)]
+        y_append = data[i:i + seq_length, len(INDICATORS):]
         x.append(x_append)
         y.append(y_append)
     return np.array(x), np.array(y)
 
 
 def setup_data_for_prediction():
-    data_file = os.path.join(dataDir, 'stocks_with_tomorrow_prc.parquet')
-    processed_file = os.path.join(dataDir, 'data_for_price_prediction.parquet')
+    data_file = os.path.join(DATA_DIR, 'stocks_with_tomorrow_prc.parquet')
+    processed_file = os.path.join(DATA_DIR, 'data_for_price_prediction.data')
 
     if not os.path.isfile(processed_file):
         data = pd.read_parquet(data_file)
-        data = data.loc[:, indicators + predictors]
+        data = data.loc[:, INDICATORS + PREDICTORS]
         data = data.fillna(0)
         data.to_parquet(processed_file)
 
@@ -100,12 +100,12 @@ def setup_data_for_prediction():
 
         all_data_points = [x_train, y_train, x_train, y_test]
 
-        with open(data_file, "wb") as f:
+        with open(processed_file, "wb") as f:
             pickle.dump(all_data_points, f)
 
 
 def setup_data_for_fama_french(ticker):
-    data_file = os.path.join(dataDir, 'hackathon_sample_v2.parquet')
+    data_file = os.path.join(DATA_DIR, 'hackathon_sample_v2.parquet')
 
     df = pd.read_parquet(data_file)
     stock_data = df[df['stock_ticker'] == ticker].copy()
@@ -155,8 +155,8 @@ def detect_and_adjust_splits_for_all_stocks(data):
 
 def setup_data_for_stock_rl():
     print('[logs] starting the algorithm')
-    data_file = os.path.join(dataDir, 'hackathon_sample_v2.parquet')
-    processed_file = os.path.join(dataDir, 'test_hackathon_data_with_adjusted_splits.parquet')
+    data_file = os.path.join(DATA_DIR, 'hackathon_sample_v2.parquet')
+    processed_file = os.path.join(DATA_DIR, 'test_hackathon_data_with_adjusted_splits.parquet')
 
     if not os.path.isfile(processed_file):
         data = pd.read_parquet(data_file)
@@ -171,8 +171,8 @@ def setup_data_for_stock_rl():
 
 
 def setup_testing_data():
-    data_file = os.path.join(dataDir, 'hackathon_sample_v2.parquet')
-    processed_file = os.path.join(dataDir, 'test_hackathon_data_with_adjusted_splits.parquet')
+    data_file = os.path.join(DATA_DIR, 'hackathon_sample_v2.parquet')
+    processed_file = os.path.join(DATA_DIR, 'test_hackathon_data_with_adjusted_splits.parquet')
 
     if not os.path.isfile(processed_file):
         data = pd.read_parquet(data_file)

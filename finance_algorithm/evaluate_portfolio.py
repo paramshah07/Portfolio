@@ -4,13 +4,13 @@ import torch
 from stable_baselines3 import PPO
 import os.path
 from ai_algorithm.RL.stock_rl import ppo_portfolio_algorithm
-from config import indicators, dataDir
+from config import INDICATORS, DATA_DIR
 from finance_algorithm.black_litterman import black_litterman_optimization
 
 
 def select_stock_portfolio(data):
     results_list = []
-    model_path = os.path.join(dataDir, 'trading_bot.zip')
+    model_path = os.path.join(DATA_DIR, 'trading_bot.zip')
 
     if not os.path.isfile(model_path):
         ppo_portfolio_algorithm()
@@ -19,7 +19,7 @@ def select_stock_portfolio(data):
 
     for _, stock_data in data.iterrows():
         ticker = stock_data['stock_ticker']
-        obs_data = stock_data[indicators].values
+        obs_data = stock_data[INDICATORS].values
         obs_data = obs_data.reshape(1, -1).astype(np.float32)
         obs_tensor = torch.from_numpy(obs_data)
 

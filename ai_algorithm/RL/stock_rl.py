@@ -3,7 +3,7 @@ import os.path
 import matplotlib.pyplot as plt
 from stable_baselines3 import PPO
 
-from config import dataDir
+from config import DATA_DIR, LOGS_DIR
 from data.data_collection import setup_data_for_stock_rl
 from ai_algorithm.RL.personal_env import PersonalStockEnv, personal_process_data
 
@@ -16,7 +16,7 @@ def setup_model(data, stock_tickers, device):
     env = PersonalStockEnv(prices, signal_features, df=data,
                            window_size=window_size, frame_bound=(window_size, len(data)))
     model = PPO("MlpPolicy", env, device=device,
-                tensorboard_log='../logs/saved_models/', verbose=1)
+                tensorboard_log=os.path.join(LOGS_DIR, 'saved_models/'), verbose=1)
 
     return model
 
@@ -33,7 +33,7 @@ def check_ppo_portfolio_algorithm(data, ticker="AAPL"):
     env = PersonalStockEnv(prices, signal_features, df=data[data['stock_ticker'] == ticker], window_size=1,
                            frame_bound=(
                                window_size, len(data[data['stock_ticker'] == ticker])))
-    trading_bot = os.path.join(dataDir, 'trading_bot')
+    trading_bot = os.path.join(DATA_DIR, 'trading_bot')
     model = PPO.load(trading_bot)
 
     obs, _ = env.reset()
@@ -53,7 +53,7 @@ def check_ppo_portfolio_algorithm(data, ticker="AAPL"):
 
 
 def ppo_portfolio_algorithm(total_timestamps=100_000, device='mps', checker_ticker='AAPL'):
-    bot_name = os.path.join(dataDir, 'trading_bot.zip')
+    bot_name = os.path.join(DATA_DIR, 'trading_bot.zip')
 
     data, stock_tickers = setup_data_for_stock_rl()
 

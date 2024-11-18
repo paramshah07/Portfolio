@@ -1,6 +1,6 @@
 from gym_anytrading.envs import StocksEnv
 
-from config import indicators
+from config import INDICATORS
 
 
 def personal_process_data(df, window_size, frame_bound):
@@ -8,7 +8,7 @@ def personal_process_data(df, window_size, frame_bound):
     end = frame_bound[1]
 
     prices = df.loc[:, 'prc'].to_numpy()[start:end]
-    signal_features = df.loc[:, indicators].to_numpy()[start:end]
+    signal_features = df.loc[:, INDICATORS].to_numpy()[start:end]
 
     return prices, signal_features
 
