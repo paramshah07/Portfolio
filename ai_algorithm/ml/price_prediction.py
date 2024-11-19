@@ -1,11 +1,14 @@
+"""
+TODO
+"""
+
 import os.path
 import pickle
 
-import tensorflow as tf
-from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
-from tensorflow.keras.layers import LSTM, Dense, Input, Dropout
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.optimizers import Adam
+from keras.api.callbacks import ModelCheckpoint, TensorBoard
+from keras.api.layers import LSTM, Dense, Input, Dropout
+from keras.api.models import Sequential, load_model
+from keras.api.optimizers import Adam
 
 from common.config import DATA_DIR, MODELS_DIR
 
@@ -14,6 +17,10 @@ weight_file = os.path.join(MODELS_DIR, 'price_prediction/model_weights.weights.h
 
 
 def setup():
+    """
+    TODO
+    """
+
     data_file = os.path.join(DATA_DIR, 'data_for_price_prediction.data')
 
     with open(data_file, 'rb') as f:
@@ -23,6 +30,10 @@ def setup():
 
 
 def setup_model(x_train):
+    """
+    TODO
+    """
+
     model = Sequential()
 
     # Defining the model
@@ -46,6 +57,10 @@ def setup_model(x_train):
 
 
 def price_prediction_algorithm():
+    """
+    TODO
+    """
+
     keras_file = os.path.join(DATA_DIR, 'price_prediction.keras')
     x_train, y_train, x_test, y_test = setup()
 
@@ -70,7 +85,7 @@ def price_prediction_algorithm():
 
         model.save(keras_file)
     else:
-        model = tf.keras.models.load_model(keras_file)
+        model = load_model(keras_file)
 
     predicted_price = model.predict(x_test)
     return predicted_price, y_test

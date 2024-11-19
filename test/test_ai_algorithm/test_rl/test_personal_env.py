@@ -5,7 +5,7 @@ TODO
 import unittest
 
 
-class TestPricePrediction(unittest.TestCase):
+class TestPersonalEnv(unittest.TestCase):
     """
     TODO
     """

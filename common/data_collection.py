@@ -75,7 +75,7 @@ def setup_tomorrow():
 
     if not os.path.isfile(processed_file):
         df = pd.read_parquet(data_file)
-        df_list = list()
+        df_list = []
         stock_tickers = df.stock_ticker.unique().tolist()
         for ticker in stock_tickers:
             new_df = df[df['stock_ticker'] == ticker].copy()
@@ -132,7 +132,7 @@ def setup_data_for_prediction():
         x_train, y_train = create_sequences(train_data)
 
         # Create sequences for testing set
-        x_test, y_test = create_sequences(test_data)
+        _, y_test = create_sequences(test_data)
 
         all_data_points = [x_train, y_train, x_train, y_test]
 

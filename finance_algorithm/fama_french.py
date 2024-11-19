@@ -1,11 +1,20 @@
+"""
+TODO
+"""
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import statsmodels.api as sm
+
 from common.data_collection import setup_data_for_fama_french
 
 
 def check_output(model, ticker):
+    """
+    TODO
+    """
+
     factors = model.params.index[1:]
     coefficients = model.params.values[1:]
     confidence_intervals = model.conf_int().diff(axis=1).iloc[1]
@@ -40,6 +49,10 @@ def check_output(model, ticker):
 
 
 def fama_french_5_algorithm(ticker, show=False):
+    """
+    TODO
+    """
+
     ticker_monthly = setup_data_for_fama_french(ticker)
 
     ff_factors_monthly = pd.read_csv(
@@ -54,15 +67,14 @@ def fama_french_5_algorithm(ticker, show=False):
         ff_factors_monthly.index.isin(ticker_monthly.index)
     ].copy()
 
-    ff_factors_subset["Excess_Return"] = ticker_monthly["Return"] - \
-        ff_factors_subset["RF"]
+    ff_factors_subset["Excess_Return"] = ticker_monthly["Return"] - ff_factors_subset["RF"]
 
     x = sm.add_constant(
         ff_factors_subset[["Mkt-RF", "SMB", "HML", "RMW", "CMA", "RF"]])
 
     y = ff_factors_subset["Excess_Return"]
 
-    model = sm.OLS(y, x).fit()\
+    model = sm.OLS(y, x).fit()
 
     if show:
         check_output(model, ticker)

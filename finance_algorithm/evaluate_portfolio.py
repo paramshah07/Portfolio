@@ -1,14 +1,25 @@
+"""
+TODO
+"""
+
+import os.path
+import torch
+
 import numpy as np
 import pandas as pd
-import torch
+
 from stable_baselines3 import PPO
-import os.path
-from ai_algorithm.RL.stock_rl import ppo_portfolio_algorithm
+
+from ai_algorithm.rl.stock_rl import ppo_portfolio_algorithm
 from common.config import INDICATORS, DATA_DIR
 from finance_algorithm.black_litterman import black_litterman_optimization
 
 
 def select_stock_portfolio(data):
+    """
+    TODO
+    """
+
     results_list = []
     model_path = os.path.join(DATA_DIR, 'trading_bot.zip')
 
@@ -53,6 +64,9 @@ def select_stock_portfolio(data):
 
 
 def backtest_portfolio(data):
+    """
+    TODO
+    """
 
     data = data.sort_values('date')
 
@@ -82,7 +96,8 @@ def backtest_portfolio(data):
 
         if current_portfolio is not None and i > 0:
             portfolio_return = 0
-            for stock, weight in zip(sorted_black_litterman_return.columns, sorted_black_litterman_return.iloc[0]):
+            for stock, weight in zip(sorted_black_litterman_return.columns,
+                                     sorted_black_litterman_return.iloc[0]):
                 prev_price_data = data[(
                     data['date'] == dates[i-1]) & (data['stock_ticker'] == stock)]['prc']
                 curr_price_data = current_data[current_data['stock_ticker']
@@ -113,7 +128,8 @@ def backtest_portfolio(data):
 
         current_portfolio = [
             {'ticker': stock, 'weight': weight}
-            for stock, weight in zip(sorted_black_litterman_return.columns, sorted_black_litterman_return.iloc[0])
+            for stock, weight in zip(sorted_black_litterman_return.columns,
+                                     sorted_black_litterman_return.iloc[0])
         ]
 
     performance_df = pd.DataFrame(portfolio_performance)
@@ -133,6 +149,7 @@ def backtest_portfolio(data):
         print(f"Sharpe Ratio: {sharpe_ratio:.2f}")
         print(f"Max Drawdown: {max_drawdown:.2%}")
     else:
-        print("No performance data generated. Check if the portfolio is being properly initialized and updated.")
+        print("No performance data generated. Check if the portfolio is being properly "
+              "initialized and updated.")
 
     return performance_df, compositions_df

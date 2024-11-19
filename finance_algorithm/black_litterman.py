@@ -1,3 +1,7 @@
+"""
+TODO
+"""
+
 import numpy as np
 
 
@@ -17,7 +21,11 @@ def estimate_market_caps(returns):
     return estimated_market_caps
 
 
-def black_litterman_optimization(returns, risk_free_rate=0.02/252, delta=2.5, num_stocks=75, regularization=1e-5):
+def black_litterman_optimization(returns, risk_free_rate=0.02 / 252, delta=2.5, num_stocks=75,
+                                 regularization=1e-5):
+    """
+    TODO
+    """
 
     if returns.ndim == 1:
         returns = returns.reshape(1, -1)
@@ -41,8 +49,7 @@ def black_litterman_optimization(returns, risk_free_rate=0.02/252, delta=2.5, nu
     d = np.dot(a.T, b)
     e = np.dot(post_pi.T, np.dot(np.linalg.inv(delta * post_sigma), post_pi))
     lam = (e * c - d * d) / (c * (e + risk_free_rate) - d * d)
-    optimal_weights = (1/delta) * \
-        np.dot(np.linalg.inv(post_sigma), post_pi - lam * a)
+    optimal_weights = (1 / delta) * np.dot(np.linalg.inv(post_sigma), post_pi - lam * a)
 
     sorted_indices = np.argsort(np.abs(optimal_weights))[::-1]
     selected_indices = sorted_indices[:num_stocks]

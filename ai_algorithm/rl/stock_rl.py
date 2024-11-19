@@ -1,3 +1,7 @@
+"""
+TODO
+"""
+
 import os.path
 
 import matplotlib.pyplot as plt
@@ -5,12 +9,16 @@ from stable_baselines3 import PPO
 
 from common.config import DATA_DIR, LOGS_DIR
 from common.data_collection import setup_data_for_stock_rl
-from ai_algorithm.RL.personal_env import PersonalStockEnv, personal_process_data
+from ai_algorithm.rl.personal_env import PersonalStockEnv, personal_process_data
 
-TAG = "[STOCK RL]"
+TAG = "[STOCK test_rl]"
 
 
-def setup_model(data, stock_tickers, device):
+def setup_model(data, device):
+    """
+    TODO
+    """
+
     print(f'{TAG} setting up the model')
     window_size = 1
     prices, signal_features = personal_process_data(
@@ -24,6 +32,10 @@ def setup_model(data, stock_tickers, device):
 
 
 def check_ppo_portfolio_algorithm(data, ticker="AAPL"):
+    """
+    TODO
+    """
+
     print(f'{TAG} checking the trained model')
 
     window_size = 1
@@ -43,7 +55,7 @@ def check_ppo_portfolio_algorithm(data, ticker="AAPL"):
 
     while True:
         action, _ = model.predict(obs)
-        obs, rewards, terminated, truncated, info = env.step(action)
+        obs, _, terminated, truncated, info = env.step(action)
         done = terminated or truncated
         if done:
             print("info", info)
@@ -56,12 +68,16 @@ def check_ppo_portfolio_algorithm(data, ticker="AAPL"):
 
 
 def ppo_portfolio_algorithm(total_timestamps=100_000, device='mps', checker_ticker='AAPL'):
+    """
+    TODO
+    """
+
     bot_name = os.path.join(DATA_DIR, 'trading_bot.zip')
 
-    data, stock_tickers = setup_data_for_stock_rl()
+    data, _ = setup_data_for_stock_rl()
 
     if not os.path.isfile(bot_name):
-        model = setup_model(data, stock_tickers, device)
+        model = setup_model(data, device)
 
         print(f'{TAG} starting the training process')
         model.learn(total_timesteps=total_timestamps)
