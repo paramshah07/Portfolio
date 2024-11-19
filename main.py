@@ -4,8 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from ai_algorithm.ML.price_prediction import price_prediction_algorithm
-from config import DATA_DIR
-from data.data_collection import setup_data
+from common.config import DATA_DIR
+from common.data_collection import setup_data
 from ai_algorithm.RL.stock_rl import ppo_portfolio_algorithm
 from finance_algorithm.black_litterman import black_litterman_optimization
 from finance_algorithm.fama_french import fama_french_5_algorithm

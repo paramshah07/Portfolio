@@ -12,8 +12,5 @@ models
 .idea
 model_checkpoints
 
-data/*.parquet
-data/*.csv
-data/*.keras
-data/*.zip
-data/*.data
+data
+!data/data.sample

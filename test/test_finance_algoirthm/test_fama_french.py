@@ -5,12 +5,12 @@ TODO
 import unittest
 
 
-class TestDataCollection(unittest.TestCase):
+class TestFamaFrench(unittest.TestCase):
     """
     TODO
     """
 
-    def test_data_collection(self):
+    def test_black_litterman(self):
         """
         TODO
         """

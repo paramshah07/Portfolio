@@ -4,7 +4,7 @@ import torch
 from stable_baselines3 import PPO
 import os.path
 from ai_algorithm.RL.stock_rl import ppo_portfolio_algorithm
-from config import INDICATORS, DATA_DIR
+from common.config import INDICATORS, DATA_DIR
 from finance_algorithm.black_litterman import black_litterman_optimization
 
 

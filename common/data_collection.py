@@ -1,3 +1,7 @@
+"""
+Setting up data for the project
+"""
+
 import datetime
 import os
 import pickle
@@ -6,10 +10,18 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
-from config import INDICATORS, PREDICTORS, DATA_DIR, DATA_FILE
+from common.config import INDICATORS, PREDICTORS, DATA_DIR, DATA_FILE
+
+TAG = "[DATA COLLECTION]"
 
 
 def setup_data():
+    """
+    TODO
+    """
+
+    print(f"{TAG} running main setup function")
+
     data_file = DATA_FILE
     processed_file = os.path.join(DATA_DIR, 'hackathon_sample_v2.parquet')
 
@@ -25,6 +37,12 @@ def setup_data():
 
 
 def setup_stock_prices():
+    """
+    TODO
+    """
+
+    print(f"{TAG} setting up stock prices data")
+
     data_file = os.path.join(DATA_DIR, 'hackathon_sample_v2.parquet')
     processed_file = os.path.join(DATA_DIR, 'stock_prices.parquet')
 
@@ -46,6 +64,12 @@ def setup_stock_prices():
 
 
 def setup_tomorrow():
+    """
+    TODO
+    """
+
+    print(f"{TAG} setting up data for tomorrow")
+
     data_file = os.path.join(DATA_DIR, 'hackathon_sample_v2.parquet')
     processed_file = os.path.join(DATA_DIR, 'stocks_with_tomorrow_prc.parquet')
 
@@ -63,6 +87,12 @@ def setup_tomorrow():
 
 
 def create_sequences(data, seq_length=10):
+    """
+    TODO
+    """
+
+    print(f"{TAG} creating data sequences for model training")
+
     x = []
     y = []
     for i in range(len(data) - seq_length):
@@ -74,6 +104,12 @@ def create_sequences(data, seq_length=10):
 
 
 def setup_data_for_prediction():
+    """
+    TODO
+    """
+
+    print(f"{TAG} setting up data for prediction AI")
+
     data_file = os.path.join(DATA_DIR, 'stocks_with_tomorrow_prc.parquet')
     processed_file = os.path.join(DATA_DIR, 'data_for_price_prediction.data')
 
@@ -105,6 +141,12 @@ def setup_data_for_prediction():
 
 
 def setup_data_for_fama_french(ticker):
+    """
+    TODO
+    """
+
+    print(f"{TAG} setting up data for fama french")
+
     data_file = os.path.join(DATA_DIR, 'hackathon_sample_v2.parquet')
 
     df = pd.read_parquet(data_file)
@@ -123,6 +165,12 @@ def setup_data_for_fama_french(ticker):
 
 
 def detect_and_adjust_splits_for_all_stocks(data):
+    """
+    TODO
+    """
+
+    print(f"{TAG} adjusting all stocks for splits")
+
     # Sort by stock_ticker and date to ensure proper comparison for each stock
     data = data.sort_values(by=['stock_ticker', 'date'])
 
@@ -154,7 +202,12 @@ def detect_and_adjust_splits_for_all_stocks(data):
 
 
 def setup_data_for_stock_rl():
-    print('[logs] starting the algorithm')
+    """
+    TODO
+    """
+
+    print(f"{TAG} setting up data for reinforcement learning")
+
     data_file = os.path.join(DATA_DIR, 'hackathon_sample_v2.parquet')
     processed_file = os.path.join(DATA_DIR, 'test_hackathon_data_with_adjusted_splits.parquet')
 
@@ -171,6 +224,12 @@ def setup_data_for_stock_rl():
 
 
 def setup_testing_data():
+    """
+    TODO
+    """
+
+    print(f"{TAG} setting up data for testing purposes")
+
     data_file = os.path.join(DATA_DIR, 'hackathon_sample_v2.parquet')
     processed_file = os.path.join(DATA_DIR, 'test_hackathon_data_with_adjusted_splits.parquet')
 

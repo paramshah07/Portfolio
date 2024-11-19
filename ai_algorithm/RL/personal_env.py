@@ -1,6 +1,6 @@
 from gym_anytrading.envs import StocksEnv
 
-from config import INDICATORS
+from common.config import INDICATORS
 
 
 def personal_process_data(df, window_size, frame_bound):

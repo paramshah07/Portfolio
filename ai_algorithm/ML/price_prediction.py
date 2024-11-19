@@ -7,7 +7,7 @@ from tensorflow.keras.layers import LSTM, Dense, Input, Dropout
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
-from config import DATA_DIR, MODELS_DIR
+from common.config import DATA_DIR, MODELS_DIR
 
 # Global Constants
 weight_file = os.path.join(MODELS_DIR, 'price_prediction/model_weights.weights.h5')
