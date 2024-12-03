@@ -8,9 +8,11 @@ venv
 *.pth
 
 logs
-models
 .idea
 model_checkpoints
 
 data
 !data/data.sample
+
+models
+!models/models.sample

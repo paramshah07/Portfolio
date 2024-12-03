@@ -7,10 +7,6 @@ import unittest
 
 import numpy as np
 
-from keras import Sequential, Input
-from keras.src.layers import Dropout, Dense
-from keras.api.optimizers import Adam
-
 from ai_algorithm.ml.price_prediction import PricePredictionModel, define_model
 from common.config import DATA_DIR, MODELS_DIR
 
