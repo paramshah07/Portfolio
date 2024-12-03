@@ -5,6 +5,8 @@ AI Price Prediction Model.
 import os.path
 import pickle
 
+import numpy as np
+
 from keras.api.callbacks import ModelCheckpoint, TensorBoard
 from keras.api.layers import Dense, Input, Dropout
 from keras.api.models import Sequential, load_model
@@ -54,15 +56,21 @@ class PricePredictionModel:
         self.keras_file = keras_file
         self.log_path = os.path.join(MODELS_DIR, 'price_prediction/logs/')
 
-        self.x_train = x_train
-        self.y_train = y_train
-        self.x_test = x_test
-        self.y_test = y_test
+        self.x_train: np.ndarray = x_train
+        self.y_train: np.ndarray = y_train
+        self.x_test: np.ndarray = x_test
+        self.y_test: np.ndarray = y_test
 
         # Getting the data
         if self.x_train is None:
             with open(self.data_file, 'rb') as f:
                 self.x_train, self.y_train, self.x_test, self.y_test = pickle.load(f)
+
+                # TODO: Workaround for now
+                self.x_train = self.x_train.reshape(-1, self.x_train.shape[-1])
+                self.y_train = self.y_train.reshape(-1, self.y_train.shape[-1])
+                self.x_test = self.x_test.reshape(-1, self.x_test.shape[-1])
+                self.y_test = self.y_test.reshape(-1, self.y_test.shape[-1])
 
         self.model = define_model(self.x_train)
 
