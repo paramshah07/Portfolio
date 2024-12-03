@@ -7,7 +7,7 @@
     - `personal_env.py`: Custom `gymnasium` environment for PPO to use and get rewards.
     - `stock_rl.py`: Using PPO RL algorithm to find the best future prediction.
   - `ml`
-    - `price_prediction.py`: LSTM model to predict future behavior of a stock.
+    - `price_prediction.py`: model to predict future behavior of a stock.
 
 
 - `data`: Where data collection happens, and where all the necessary data is stored.
