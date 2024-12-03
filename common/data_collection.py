@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
-from common.config import INDICATORS, PREDICTORS, DATA_DIR, DATA_FILE
+from common.config import INDICATORS, PREDICTORS, DATA_DIR, DATA_FILE, PRICE_COLUMN
 
 TAG = "[DATA COLLECTION]"
 
@@ -48,7 +48,7 @@ def setup_stock_prices():
 
     if not os.path.isfile(processed_file):
         table = pd.read_parquet(data_file)
-        table = table.loc[:, ['date', 'stock_ticker', 'prc']]
+        table = table.loc[:, ['date', 'stock_ticker', PRICE_COLUMN]]
         stocks = table['stock_ticker'].unique().tolist()
         dates = table['date'].unique().tolist()
 
@@ -79,7 +79,7 @@ def setup_tomorrow():
         stock_tickers = df.stock_ticker.unique().tolist()
         for ticker in stock_tickers:
             new_df = df[df['stock_ticker'] == ticker].copy()
-            new_df.loc[:, 'Tomorrow'] = new_df.loc[:, 'prc'].shift(-1)
+            new_df.loc[:, 'Tomorrow'] = new_df.loc[:, PRICE_COLUMN].shift(-1)
             df_list.append(new_df)
         df = pd.concat(df_list)
         df = df[INDICATORS + PREDICTORS]
@@ -151,7 +151,7 @@ def setup_data_for_fama_french(ticker):
 
     df = pd.read_parquet(data_file)
     stock_data = df[df['stock_ticker'] == ticker].copy()
-    stock_data.loc[:, 'Adj Close'] = stock_data.loc[:, 'prc']
+    stock_data.loc[:, 'Adj Close'] = stock_data.loc[:, PRICE_COLUMN]
     stock_data.loc[:, 'date'] = stock_data.loc[:, 'date'].apply(
         lambda date: datetime.datetime.strptime(str(date), '%Y%m%d').strftime('%Y-%m'))
 
@@ -180,8 +180,8 @@ def detect_and_adjust_splits_for_all_stocks(data):
 
         # Iterate over the rows for the current stock to check for splits
         for i in range(1, len(stock_data)):
-            prev_price = stock_data.iloc[i - 1]['prc']
-            current_price = stock_data.iloc[i]['prc']
+            prev_price = stock_data.iloc[i - 1][PRICE_COLUMN]
+            current_price = stock_data.iloc[i][PRICE_COLUMN]
             prev_market_equity = stock_data.iloc[i - 1]['market_equity']
             current_market_equity = stock_data.iloc[i]['market_equity']
 
@@ -195,7 +195,7 @@ def detect_and_adjust_splits_for_all_stocks(data):
 
                 # Adjust all previous prices for this stock according to the split ratio
                 data.loc[(data['stock_ticker'] == stock_ticker) & (
-                        data['date'] <= stock_data.iloc[i]['date']), 'prc'] /= split_ratio
+                        data['date'] <= stock_data.iloc[i]['date']), PRICE_COLUMN] /= split_ratio
 
     data['stock_ticker'] = data['stock_ticker'].astype(str)
     return data

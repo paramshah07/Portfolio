@@ -9,7 +9,7 @@ from stable_baselines3 import PPO
 
 from common.config import DATA_DIR, LOGS_DIR
 from common.data_collection import setup_data_for_stock_rl
-from ai_algorithm.rl.personal_env import PersonalStockEnv, personal_process_data
+from ai_algorithm.rl.multiple_stock_gym_env import MultiStockEnv, personal_process_data
 
 TAG = "[STOCK test_rl]"
 
@@ -22,9 +22,9 @@ def setup_model(data, device):
     print(f'{TAG} setting up the model')
     window_size = 1
     prices, signal_features = personal_process_data(
-        df=data, window_size=window_size, frame_bound=(window_size, len(data)))
-    env = PersonalStockEnv(prices, signal_features, df=data,
-                           window_size=window_size, frame_bound=(window_size, len(data)))
+        stock_data=data, window_size=window_size, frame_bound=(window_size, len(data)))
+    env = MultiStockEnv(prices, signal_features, df=data,
+                        window_size=window_size, frame_bound=(window_size, len(data)))
     model = PPO("MlpPolicy", env, device=device,
                 tensorboard_log=os.path.join(LOGS_DIR, 'saved_models/'), verbose=1)
 
@@ -41,12 +41,12 @@ def check_ppo_portfolio_algorithm(data, ticker="AAPL"):
     window_size = 1
 
     prices, signal_features = personal_process_data(
-        df=data[data['stock_ticker'] == ticker],
+        stock_data=data[data['stock_ticker'] == ticker],
         window_size=window_size,
         frame_bound=(window_size, len(data[data['stock_ticker'] == ticker])))
-    env = PersonalStockEnv(prices, signal_features, df=data[data['stock_ticker'] == ticker],
-                           window_size=1,
-                           frame_bound=(
+    env = MultiStockEnv(prices, signal_features, df=data[data['stock_ticker'] == ticker],
+                        window_size=1,
+                        frame_bound=(
                                window_size, len(data[data['stock_ticker'] == ticker])))
     trading_bot = os.path.join(DATA_DIR, 'trading_bot')
     model = PPO.load(trading_bot)

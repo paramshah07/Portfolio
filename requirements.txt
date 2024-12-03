@@ -4,10 +4,10 @@ pandas==2.0.3
 tensorflow==2.18.0
 keras==3.6.0
 torch==2.5.1
-gym-anytrading==2.0.0
 stable-baselines3==2.3.2
 scikit-learn==1.6.0rc1
 seaborn==0.13.2
 statsmodels==0.14.4
 coverage==7.6.4
 fastparquet==2024.11.0
+gymnasium==0.29.1

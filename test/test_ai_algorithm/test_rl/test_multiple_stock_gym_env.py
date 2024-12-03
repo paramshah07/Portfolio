@@ -5,7 +5,7 @@ TODO
 import unittest
 
 
-class TestPersonalEnv(unittest.TestCase):
+class TestMultipleStockGymEnv(unittest.TestCase):
     """
     TODO
     """

@@ -7,7 +7,6 @@ import os.path
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from ai_algorithm.ml.price_prediction import price_prediction_algorithm
 from ai_algorithm.rl.stock_rl import ppo_portfolio_algorithm
 from common.config import DATA_DIR
 from common.data_collection import setup_data
@@ -71,16 +70,6 @@ def test_portfolio():
     performance, composition = backtest_portfolio(data)
     performance.to_csv(performance_file)
     composition.to_csv(composition_file)
-
-
-def test_price_prediction():
-    """
-    TODO
-    """
-
-    observed, expected = price_prediction_algorithm()
-
-    plt.plot(observed, expected)
 
 
 if __name__ == "__main__":

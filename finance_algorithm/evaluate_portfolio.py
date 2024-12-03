@@ -11,7 +11,7 @@ import pandas as pd
 from stable_baselines3 import PPO
 
 from ai_algorithm.rl.stock_rl import ppo_portfolio_algorithm
-from common.config import INDICATORS, DATA_DIR
+from common.config import INDICATORS, DATA_DIR, PRICE_COLUMN
 from finance_algorithm.black_litterman import black_litterman_optimization
 
 
@@ -43,7 +43,7 @@ def select_stock_portfolio(data):
 
         model_weight = value.item()
 
-        price = stock_data['prc']
+        price = stock_data[PRICE_COLUMN]
 
         composite_score = (
             0.4 * model_weight +
@@ -99,9 +99,9 @@ def backtest_portfolio(data):
             for stock, weight in zip(sorted_black_litterman_return.columns,
                                      sorted_black_litterman_return.iloc[0]):
                 prev_price_data = data[(
-                    data['date'] == dates[i-1]) & (data['stock_ticker'] == stock)]['prc']
+                    data['date'] == dates[i-1]) & (data['stock_ticker'] == stock)][PRICE_COLUMN]
                 curr_price_data = current_data[current_data['stock_ticker']
-                                               == stock]['prc']
+                                               == stock][PRICE_COLUMN]
 
                 if not prev_price_data.empty and not curr_price_data.empty:
                     prev_price = prev_price_data.values[0]
