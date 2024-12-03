@@ -43,12 +43,12 @@ class PricePredictionModel:
 
     def __init__(self,
                  keras_file=os.path.join(DATA_DIR, 'price_prediction.keras'),
+                 weight_file=os.path.join(MODELS_DIR, 'price_prediction/model_weights.weights.h5'),
                  x_train=None,
                  y_train=None,
                  x_test=None,
                  y_test=None):
-        self.weight_file: str = os.path.join(MODELS_DIR,
-                                             'price_prediction/model_weights.weights.h5')
+        self.weight_file = weight_file
         self.data_file: str = os.path.join(DATA_DIR, 'data_for_price_prediction.data')
 
         self.keras_file = keras_file

@@ -12,7 +12,7 @@ from keras.src.layers import Dropout, Dense
 from keras.api.optimizers import Adam
 
 from ai_algorithm.ml.price_prediction import PricePredictionModel, define_model
-from common.config import DATA_DIR
+from common.config import DATA_DIR, MODELS_DIR
 
 
 class TestPricePrediction(unittest.TestCase):
@@ -21,11 +21,20 @@ class TestPricePrediction(unittest.TestCase):
     """
 
     def setUp(self):
-        self.test_dir = os.path.join(DATA_DIR, 'test')
-        self.test_keras_file = os.path.join(self.test_dir, 'price_prediction.keras')
+        self.test_data_dir = os.path.join(DATA_DIR, 'test')
+        self.test_models_dir = os.path.join(MODELS_DIR, 'test')
+        self.test_models_predictions_dir = os.path.join(self.test_models_dir, 'price_prediction')
 
-        if not os.path.exists(self.test_dir):
-            os.mkdir(self.test_dir)
+        self.test_keras_file = os.path.join(self.test_data_dir, 'price_prediction.keras')
+        self.test_weight_file = os.path.join(self.test_models_predictions_dir,
+                                             'model_weights.weights.h5')
+
+        if not os.path.exists(self.test_data_dir):
+            os.mkdir(self.test_data_dir)
+
+        if not os.path.exists(self.test_models_dir):
+            os.mkdir(self.test_models_dir)
+            os.mkdir(self.test_models_predictions_dir)
 
         self.x_train = np.array([[1, 2, 10, 15],
                                  [4, 5, -1, 1000],
@@ -37,6 +46,7 @@ class TestPricePrediction(unittest.TestCase):
                                 [10, -1, 4, 2], ])
 
         self.price_predictor = PricePredictionModel(self.test_keras_file,
+                                                    self.test_weight_file,
                                                     self.x_train,
                                                     self.y_train,
                                                     self.x_test)
@@ -45,7 +55,12 @@ class TestPricePrediction(unittest.TestCase):
         if os.path.exists(self.test_keras_file):
             os.remove(self.test_keras_file)
 
-        os.rmdir(self.test_dir)
+        if os.path.exists(self.test_weight_file):
+            os.remove(self.test_weight_file)
+
+        os.rmdir(self.test_data_dir)
+        os.rmdir(self.test_models_predictions_dir)
+        os.rmdir(self.test_models_dir)
 
     def test_train_if_model_saved(self):
         """
