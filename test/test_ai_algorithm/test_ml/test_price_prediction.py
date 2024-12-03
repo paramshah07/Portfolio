@@ -11,7 +11,7 @@ from keras import Sequential, Input
 from keras.src.layers import Dropout, Dense
 from keras.api.optimizers import Adam
 
-from ai_algorithm.ml.price_prediction import PricePredictionModel
+from ai_algorithm.ml.price_prediction import PricePredictionModel, define_model
 from common.config import DATA_DIR
 
 
@@ -20,33 +20,9 @@ class TestPricePrediction(unittest.TestCase):
     Run a model of price prediction, and see how it plays out
     """
 
-    def __set_up_test_model__(self):
-        """
-        TODO
-        """
-
-        model = Sequential()
-
-        model.add(Input(shape=(self.x_train.shape[1],)))
-        model.add(Dense(128, activation='relu'))
-        model.add(Dropout(0.5))
-        model.add(Dense(units=256))
-        model.add(Dropout(0.5))
-        model.add(Dense(units=128))
-        model.add(Dropout(0.5))
-        model.add(Dense(units=32))
-        model.add(Dropout(0.5))
-        model.add(Dense(units=1))
-
-        model.compile(loss='mean_squared_error',
-                      optimizer=Adam(0.001),
-                      metrics=['accuracy'])
-
-        return model
-
     def setUp(self):
         self.test_dir = os.path.join(DATA_DIR, 'test')
-        self.test_keras_file = os.path.join(DATA_DIR, 'test/price_prediction.keras')
+        self.test_keras_file = os.path.join(self.test_dir, 'price_prediction.keras')
 
         if not os.path.exists(self.test_dir):
             os.mkdir(self.test_dir)
@@ -58,7 +34,7 @@ class TestPricePrediction(unittest.TestCase):
                                  [11],
                                  [5]])
         self.x_test = np.array([[0, 3, 5, 2],
-                                [10, -1, 4, 2],])
+                                [10, -1, 4, 2], ])
 
         self.price_predictor = PricePredictionModel(self.test_keras_file,
                                                     self.x_train,
@@ -78,7 +54,7 @@ class TestPricePrediction(unittest.TestCase):
         Should load our test's saved model in price predictor's model.
         """
 
-        model = self.__set_up_test_model__()
+        model = define_model(self.x_train)
         model.save(self.test_keras_file)
 
         self.price_predictor.train()
@@ -97,7 +73,7 @@ class TestPricePrediction(unittest.TestCase):
         Should run one epoch of the training section just for checking.
         """
 
-        model = self.__set_up_test_model__()
+        model = define_model(self.x_train)
         self.price_predictor.train(epochs=1)
 
         number_layers = len(model.layers)

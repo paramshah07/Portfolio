@@ -13,10 +13,32 @@ from keras.api.optimizers import Adam
 from common.config import DATA_DIR, MODELS_DIR
 
 
+def define_model(x_train) -> Sequential:
+    model = Sequential()
+
+    model.add(Input(shape=(x_train.shape[1],)))
+    model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(units=256))
+    model.add(Dropout(0.5))
+    model.add(Dense(units=128))
+    model.add(Dropout(0.5))
+    model.add(Dense(units=32))
+    model.add(Dropout(0.5))
+    model.add(Dense(units=1))
+
+    model.compile(loss='mean_squared_error',
+                  optimizer=Adam(0.001),
+                  metrics=['accuracy'])
+
+    return model
+
+
 class PricePredictionModel:
     """
-    Instance of AI price prediction model. If previous iteration data is available, we load that
-    directly.
+    Instance of AI price prediction model. 
+
+    If previous iteration data is available, we load that directly.
     """
 
     def __init__(self,
@@ -42,22 +64,7 @@ class PricePredictionModel:
             with open(self.data_file, 'rb') as f:
                 self.x_train, self.y_train, self.x_test, self.y_test = pickle.load(f)
 
-        self.model = Sequential()
-
-        self.model.add(Input(shape=(x_train.shape[1],)))
-        self.model.add(Dense(128, activation='relu'))
-        self.model.add(Dropout(0.5))
-        self.model.add(Dense(units=256))
-        self.model.add(Dropout(0.5))
-        self.model.add(Dense(units=128))
-        self.model.add(Dropout(0.5))
-        self.model.add(Dense(units=32))
-        self.model.add(Dropout(0.5))
-        self.model.add(Dense(units=1))
-
-        self.model.compile(loss='mean_squared_error',
-                           optimizer=Adam(0.001),
-                           metrics=['accuracy'])
+        self.model = define_model(self.x_train)
 
         if os.path.isfile(self.weight_file):
             self.model.load_weights(self.weight_file)
